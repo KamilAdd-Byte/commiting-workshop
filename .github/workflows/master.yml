@@ -1,9 +1,0 @@
-jobs:
-on:
-   push:
-    branches:
-    - master
-    - develop
-    - release/*
-    - fix/*
-    - poc/*
