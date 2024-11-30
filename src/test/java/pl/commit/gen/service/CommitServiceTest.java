@@ -43,7 +43,7 @@ class CommitServiceTest {
         assertTrue(commitMessage.contains("feat"));
         assertTrue(commitMessage.contains("UI"));
         assertTrue(commitMessage.contains("Add new button"));
-        assertFalse(commitMessage.contains("Added a new button to the main page."));
+        assertTrue(commitMessage.contains("Added a new button to the main page."));
     }
 
     @Test
