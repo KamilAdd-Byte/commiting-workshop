@@ -1,5 +1,6 @@
+jobs:
 on:
-  push:
+   push:
     branches:
     - master
     - develop
