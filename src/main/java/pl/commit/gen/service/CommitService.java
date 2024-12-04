@@ -16,12 +16,13 @@ public class CommitService {
         if (!isValidType(type)) {
             throw new IllegalArgumentException("Invalid commit type: " + type);
         }
+        MajorNumber majorNumber = MajorNumberPreparer.of(major).getMajorNumber();
         String changeDescriptionTranslated = getChangeDescriptionTranslated(changeDescription);
         String detailsTranslated = !details.isEmpty() ? getChangeDescriptionTranslated(details) : "";
         return String.format(
                 COMMITING_WORK_PATTERN,
                 GIT_COMMAND,
-                major != null ? major : "",
+                majorNumber != null ? majorNumber.issueNumber() : "",
                 type,
                 component,
                 changeDescriptionTranslated,
