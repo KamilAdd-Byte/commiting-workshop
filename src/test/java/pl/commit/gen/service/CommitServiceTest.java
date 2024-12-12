@@ -26,7 +26,7 @@ class CommitServiceTest {
     @Test
     void testGenerateCommitValidType() {
         // given
-        String major = "1.0.0";
+        String major = "link/1.0.0";
         String type = "feat";
         String component = "UI";
         String changeDescription = "Add new button";
@@ -62,7 +62,7 @@ class CommitServiceTest {
     @Test
     void testGenerateCommitEmptyDetails() {
         // given
-        String major = "1.0.0";
+        String major = "link/1.0.0";
         String type = "fix";
         String component = "Backend";
         String changeDescription = "Fix bug in payment module";
@@ -81,7 +81,7 @@ class CommitServiceTest {
     @Test
     void testGenerateCommitWithTaskNumber() {
         // given
-        String major = "TEET-1234";
+        String major = "link/TEET-1234";
         String type = "feat";
         String component = "UI";
         String changeDescription = "Add new feature";
