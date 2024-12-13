@@ -80,3 +80,31 @@ jobs:
       # See: https://github.com/gradle/actions/blob/main/dependency-submission/README.md
       - name: Generate and submit dependency graph
         uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
+  generate-changelog:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Conventional Changelog CLI
+        run: npm install -g conventional-changelog-cli
+
+      - name: Generate CHANGELOG.md
+        run: conventional-changelog -p custom -n ./changelog.config.js -i CHANGELOG.md -s -r 0
+
+      - name: Commit and Push CHANGELOG
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "action@github.com"
+          git add CHANGELOG.md
+          git commit -m "chore: update changelog"
+          git pus
