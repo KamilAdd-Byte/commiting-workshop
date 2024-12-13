@@ -99,7 +99,7 @@ jobs:
         run: npm install -g conventional-changelog-cli
 
       - name: Generate CHANGELOG.md
-        run: conventional-changelog -p custom -n ./changelog.config.js -i CHANGELOG.md -s -r 0
+        run: conventional-changelog -p custom -n ./changelog.config.js -i CHANGELOG.md -s -r 1
 
       - name: Commit and Push CHANGELOG
         run: |
