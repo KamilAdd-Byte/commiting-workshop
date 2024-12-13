@@ -103,7 +103,7 @@ jobs:
 
       - name: Commit and Push CHANGELOG
         run: |
-          git config user.name "KamilAdd-byte"
+          git config user.name "KamilAdd-Byte"
           git config user.email "kamillodzinski09@gmail.com"
           git add CHANGELOG.md
           git commit -m "chore: update changelog"
