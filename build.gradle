@@ -37,6 +37,16 @@ tasks.test {
 	finalizedBy tasks.jacocoTestReport
 }
 
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			limit {
+				minimum = 0.70
+			}
+		}
+	}
+}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
