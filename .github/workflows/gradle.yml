@@ -90,7 +90,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # Ensure full history is available for changelog generation
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -105,7 +105,47 @@ jobs:
 
       - name: Commit and Push CHANGELOG
         run: |
-          git config user.name "KamilAdd-Byte"
-          git config user.email "kamillodzinski09@gmail.com"
           git add CHANGELOG.md
           git commit -m "chore: update changelog"
+          git push
+
+  release-changelog:
+
+      runs-on: ubuntu-latest
+      permissions:
+        contents: write
+
+      steps:
+        - uses: actions/checkout@v4
+
+        - name: Set up Python
+          uses: actions/setup-python@v1
+          with:
+            python-version: "3.8"
+
+        - name: Extract version from tag
+          id: version
+          run: |
+            VERSION=`echo "${GITHUB_REF}" | cut -f 3 -d "/"`
+            echo "Extracted version: ${VERSION}"
+            echo "::set-output name=version::${VERSION}"
+
+        - uses: vemel/update-changelog@0.0.1
+          id: changelog
+          with:
+            version: ${{ steps.version.outputs.version }}
+
+        - name: Create Pull Request
+          uses: peter-evans/create-pull-request@v2
+          with:
+            commit-message: Release ${{ steps.version.outputs.version }}
+            labels: release, bot
+            title: "Release ${{ steps.version.outputs.version }}"
+            body: |
+              # Release ${{ steps.version.outputs.version }}
+
+              Merge this PR to update your version and changelog!
+
+              ## Included Pull Requests
+
+              ${{ steps.changelog.outputs.pulls_list_md }}
