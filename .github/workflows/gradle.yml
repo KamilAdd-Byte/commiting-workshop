@@ -50,7 +50,14 @@ jobs:
 
       - name: Build with Gradle Wrapper
         run: ./gradlew build
+      - name: Run Jacoco Test Coverage Report
+        run: ./gradlew jacocoTestReport
 
+      - name: Upload Jacoco Coverage Report
+        uses: actions/upload-artifact@v3
+        with:
+            name: jacoco-report
+            path: build/reports/jacoco/test/html
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
     #
@@ -95,15 +102,3 @@ jobs:
           git commit -m "chore: update changelog"
           git push
           fi
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v2
-        with:
-          commit-message: "chore: regenerate changelog"
-          branch: update-changelog-${{ github.run_id }}
-          labels: changelog, bot
-          title: "Update changelog"
-          body: |
-            # Updated Changelog
-
-            This PR updates the changelog to reflect the latest changes.
