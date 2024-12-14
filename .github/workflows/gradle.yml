@@ -89,6 +89,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -99,12 +101,11 @@ jobs:
         run: npm install -g conventional-changelog-cli
 
       - name: Generate CHANGELOG.md
-        run: conventional-changelog -p custom -n ./changelog.config.js -i CHANGELOG.md -s -r 0
+        run: conventional-changelog -p angular -i CHANGELOG.md -s -r 0
 
       - name: Commit and Push CHANGELOG
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "action@github.com"
+          git config user.name "KamilAdd-Byte"
+          git config user.email "kamillodzinski09@gmail.com"
           git add CHANGELOG.md
           git commit -m "chore: update changelog"
-          git push
