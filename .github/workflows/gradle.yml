@@ -61,3 +61,45 @@ jobs:
 
       - name: Build with Gradle 8.11.1
         run: gradle build
+
+  generate-changelog:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Ensure full history is available for changelog generation
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Conventional Changelog CLI
+        run: npm install -g conventional-changelog-cli
+
+      - name: Generate new CHANGELOG.md
+        run: conventional-changelog -p angular -i CHANGELOG.md -s -r 0
+
+      - name: Commit and Push new CHANGELOG
+        run: |
+          git config user.name "KamilAd"
+          git config user.email "action@github.com"
+          git add CHANGELOG.md
+          git commit -m "chore: regenerate changelog"
+          git push origin HEAD
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v2
+        with:
+          commit-message: "chore: regenerate changelog"
+          branch: update-changelog-${{ github.run_id }}
+          labels: changelog, bot
+          title: "Update changelog"
+          body: |
+            # Updated Changelog
+
+            This PR updates the changelog to reflect the latest changes.
