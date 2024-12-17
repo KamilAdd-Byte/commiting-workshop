@@ -2,14 +2,12 @@ package pl.commit.gen.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.commit.gen.pattern.CommitModelPattern;
 import pl.commit.translate.TranslateCommiting;
 
 @Service
 @RequiredArgsConstructor
 public class CommitService {
-    public static final String TARGET_LANG = "EN";
-    private static final String GIT_COMMAND = "git commit -m";
-    public static final String COMMITING_WORK_PATTERN = "%s \"%s %s(%s): %s\n\n%s\"";
     private final TranslateCommiting translateCommiting;
 
     public String generateCommit(String major, String type, String component, String changeDescription, String details) {
@@ -20,8 +18,8 @@ public class CommitService {
         String changeDescriptionTranslated = getChangeDescriptionTranslated(changeDescription);
         String detailsTranslated = !details.isEmpty() ? getChangeDescriptionTranslated(details) : "";
         return String.format(
-                COMMITING_WORK_PATTERN,
-                GIT_COMMAND,
+                CommitModelPattern.getCommittingWorkPattern(),
+                CommitModelPattern.getGitCommandPattern(),
                 majorNumber != null ? majorNumber.issueNumber() : "",
                 type,
                 component,
@@ -31,7 +29,7 @@ public class CommitService {
     }
 
     private String getChangeDescriptionTranslated(String changeDescription) {
-        return translateCommiting.translate(changeDescription, TARGET_LANG);
+        return translateCommiting.translate(changeDescription, CommitModelPattern.getTargetLanguage());
     }
 
     private boolean isValidType(String type) {

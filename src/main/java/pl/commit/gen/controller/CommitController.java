@@ -1,6 +1,5 @@
 package pl.commit.gen.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.commit.gen.service.CommitService;
 
@@ -10,7 +9,6 @@ public class CommitController {
 
     private final CommitService commitService;
 
-    @Autowired
     public CommitController(CommitService commitService) {
         this.commitService = commitService;
     }
