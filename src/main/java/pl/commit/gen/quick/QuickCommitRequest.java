@@ -1,4 +1,7 @@
 package pl.commit.gen.quick;
 
-public record QuickCommitRequest() {
+record QuickCommitRequest(
+        String topicScope,
+        boolean isGitCommand
+) {
 }

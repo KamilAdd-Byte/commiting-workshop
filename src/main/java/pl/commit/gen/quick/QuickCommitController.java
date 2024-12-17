@@ -15,7 +15,9 @@ public class QuickCommitController {
 
     @PostMapping("/generate")
     public String generateCommit(@RequestBody QuickCommitRequest quickCommitRequest) {
-        //todo
-        return "";
+        return quickCommitService.generateQuickCommit(
+                quickCommitRequest.topicScope(),
+                quickCommitRequest.isGitCommand()
+        );
     }
 }
