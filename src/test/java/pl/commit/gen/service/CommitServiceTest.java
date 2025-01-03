@@ -32,12 +32,13 @@ class CommitServiceTest {
         String component = "UI";
         String changeDescription = "Add new button";
         String details = "Added a new button to the main page.";
+        boolean wholeGitCommand = true;
 
         // when
         when(translateCommiting.translate(changeDescription, "EN")).thenReturn("Add new button");
         when(translateCommiting.translate(details, "EN")).thenReturn("Added a new button to the main page.");
 
-        String commitMessage = commitService.generateTranslateCommit(major, type, component, changeDescription, details, commitTranslateRequest.wholeGitCommand());
+        String commitMessage = commitService.generateTranslateCommit(major, type, component, changeDescription, details, wholeGitCommand);
 
         // then
         assertNotNull(commitMessage);
@@ -53,7 +54,7 @@ class CommitServiceTest {
         String type = "invalidType";
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            commitService.generateTranslateCommit(null, type, "UI", "Description", "Details", commitTranslateRequest.wholeGitCommand());
+            commitService.generateTranslateCommit(null, type, "UI", "Description", "Details", false);
         });
 
         // then
@@ -68,11 +69,12 @@ class CommitServiceTest {
         String component = "Backend";
         String changeDescription = "Fix bug in payment module";
         String details = "";
+        boolean wholeGitCommand = true;
 
         // when
         when(translateCommiting.translate(changeDescription, "EN")).thenReturn("Fix bug in payment module");
 
-        String commitMessage = commitService.generateTranslateCommit(major, type, component, changeDescription, details, commitTranslateRequest.wholeGitCommand());
+        String commitMessage = commitService.generateTranslateCommit(major, type, component, changeDescription, details, wholeGitCommand);
 
         // then
         assertNotNull(commitMessage);
@@ -80,24 +82,23 @@ class CommitServiceTest {
     }
 
     @Test
-    void testGenerateTranslateCommitWithTaskNumber() {
+    void testGenerateTranslateCommitWithTaskNumberAndWholeGitCommandIsFalse() {
         // given
         String major = "link/TEET-1234";
         String type = "feat";
         String component = "UI";
         String changeDescription = "Add new feature";
-        String details = "Details of the task";
+        boolean wholeGitCommand = false;
 
         // when
         when(translateCommiting.translate(changeDescription, "EN")).thenReturn("Add new feature");
-        when(translateCommiting.translate(details, "EN")).thenReturn("Details of the task");
 
-
-        String commitMessage = commitService.generateTranslateCommit(major, type, component, changeDescription, details, commitTranslateRequest.wholeGitCommand());
+        String commitMessage = commitService.generateTranslateCommit(major, type, component, changeDescription, "", wholeGitCommand);
 
         // then
         assertNotNull(commitMessage);
         assertTrue(commitMessage.contains("TEET-1234"));
+        assertThat(commitMessage).isEqualTo("TEET-1234 feat(UI): Add new feature");
     }
 
     @Test
