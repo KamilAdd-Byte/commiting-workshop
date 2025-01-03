@@ -10,7 +10,8 @@ enum CommitType {
     STYLE("style"),
     REFACTOR("refactor"),
     TEST("test"),
-    CHORE("chore");
+    CHORE("chore"),
+    AUDIT("audit");
 
     private final String type;
 
