@@ -2,6 +2,7 @@ package pl.commit.gen.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import pl.commit.gen.pattern.CommitModelPattern;
 import pl.commit.translate.TranslateCommiting;
 
@@ -10,21 +11,42 @@ import pl.commit.translate.TranslateCommiting;
 public class CommitService {
     private final TranslateCommiting translateCommiting;
 
-    public String generateCommit(String major, String type, String component, String changeDescription, String details) {
-        if (!isValidType(type)) {
+    public String generateTranslateCommit(String major, String type, String component, String changeDescription, String details, boolean wholeGitCommand) {
+        if (isValidType(type)) {
             throw new IllegalArgumentException("Invalid commit type: " + type);
         }
+
         MajorNumber majorNumber = MajorNumberPreparer.of(major).getMajorNumber();
         String changeDescriptionTranslated = getChangeDescriptionTranslated(changeDescription);
         String detailsTranslated = !details.isEmpty() ? getChangeDescriptionTranslated(details) : "";
+        String pattern = CommitModelPattern.getPattern(wholeGitCommand, component, detailsTranslated);
+
         return String.format(
-                CommitModelPattern.getCommittingWorkPattern(),
-                CommitModelPattern.getGitCommandPattern(),
+                pattern,
+                majorNumber != null ? majorNumber.issueNumber() : "",
+                type,
+                component.isEmpty() ? changeDescriptionTranslated : component,
+                changeDescriptionTranslated,
+                detailsTranslated
+        ).trim();
+    }
+
+    public String generateFlowCommit(String major, String type, String component, String changeDescription, String details, boolean wholeGitCommand) {
+        if (isValidType(type)) {
+            throw new IllegalArgumentException("Invalid commit type: " + type);
+        }
+
+        MajorNumber majorNumber = MajorNumberPreparer.of(major).getMajorNumber();
+        String detailsFlow = details.isEmpty() ? StringUtils.trimAllWhitespace(details) : details;
+        String pattern = CommitModelPattern.getPattern(wholeGitCommand, component, detailsFlow);
+
+        return String.format(
+                pattern,
                 majorNumber != null ? majorNumber.issueNumber() : "",
                 type,
                 component,
-                changeDescriptionTranslated,
-                detailsTranslated.isEmpty() ? "" : detailsTranslated
+                changeDescription,
+                detailsFlow
         ).trim();
     }
 
@@ -33,6 +55,6 @@ public class CommitService {
     }
 
     private boolean isValidType(String type) {
-        return CommitType.isValidType(type);
+        return !CommitType.isValidType(type);
     }
 }
