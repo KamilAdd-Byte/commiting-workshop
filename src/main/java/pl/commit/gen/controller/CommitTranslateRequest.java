@@ -1,9 +1,10 @@
 package pl.commit.gen.controller;
 
-public record CommitRequest(
+public record CommitTranslateRequest(
         String major,
         String type,
         String component,
         String changeDescription,
-        String details
+        String details,
+        boolean wholeGitCommand
 ) {}
