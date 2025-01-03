@@ -23,45 +23,42 @@ class CommitModelPatternTest {
     void testGetPatternWithGitCommandWithoutDetails() {
 
         String result = CommitModelPattern.getPattern(true, "Component", "");
-        String expected = "git commit -m \"%s %s(%s): %s\"";  // GIT_COMMAND_COMMITING_WORK_PATTERN_WITHOUT_DETAILS
+        String expected = "git commit -m \"%s %s(%s): %s\"";
         assertEquals(expected, result);
     }
 
     @Test
     void testGetPatternWithGitCommand() {
         String result = CommitModelPattern.getPattern(true, "Component", "Some details");
-        String expected = "git commit -m \"%s %s(%s): %s\n\n%s\"";  // GIT_COMMAND_COMMITING_WORK_PATTERN
+        String expected = "git commit -m \"%s %s(%s): %s\n\n%s\"";
         assertEquals(expected, result);
     }
 
     @Test
     void testGetPatternWithoutGitCommandWithoutComponentAndDetails() {
-        // Gdy oba komponent i szczegóły są puste, oczekujemy wzorca bez komponentu i szczegółów (bez git)
         String result = CommitModelPattern.getPattern(false, "", "");
-        String expected = "%s %s: %s";  // COMMITING_WORK_PATTERN_WITHOUT_COMPONENT_AND_DETAILS
+        String expected = "%s %s: %s";
         assertEquals(expected, result);
     }
 
     @Test
     void testGetPatternWithoutGitCommandWithoutComponent() {
         String result = CommitModelPattern.getPattern(false, "", "Some details");
-        String expected = "%s %s: %s\n\n%s";  // COMMITING_WORK_PATTERN_WITHOUT_COMPONENT
+        String expected = "%s %s: %s\n\n%s";
         assertEquals(expected, result);
     }
 
     @Test
-    public void testGetPatternWithoutGitCommandWithoutDetails() {
-        // Gdy szczegóły są puste, ale komponent nie jest, oczekujemy wzorca bez szczegółów (bez git)
+    void testGetPatternWithoutGitCommandWithoutDetails() {
         String result = CommitModelPattern.getPattern(false, "Component", "");
-        String expected = "%s %s(%s): %s";  // COMMITING_WORK_PATTERN_WITHOUT_DETAILS
+        String expected = "%s %s(%s): %s";
         assertEquals(expected, result);
     }
 
     @Test
-    public void testGetPatternWithoutGitCommand() {
-        // Gdy komponent i szczegóły nie są puste, oczekujemy pełnego wzorca (bez git)
+    void testGetPatternWithoutGitCommand() {
         String result = CommitModelPattern.getPattern(false, "Component", "Some details");
-        String expected = "%s %s(%s): %s\n\n%s";  // COMMITING_WORK_PATTERN
+        String expected = "%s %s(%s): %s\n\n%s";
         assertEquals(expected, result);
     }
 }
